@@ -1,0 +1,69 @@
+{# page to add a new customer #}
+{%  extends 'template.view.twig' %}
+
+  {% block content %}
+
+  <section class="heading">
+    <h2>Add Customer</h2>
+  </section>
+  <div class="form-container">
+    <form action="{{ path_for('postAddCustomer') }}" method="post" class="form">
+      <h2>Enter Customer Details</h2>
+      {# show a list of errors if set #}
+      {% if errors %}
+        {% for err in errors %}
+          <p class="error">{{ err| first }}</p>
+        {% endfor %}
+      {% endif %}
+      <label for="fname">First Name</label>
+      <input id="fname" name="fname" type="text" value="{{ oldInput.fname }}" required>
+      <label for="sname">Last Name</label>
+      <input id="sname" name="sname" type="text" value="{{ oldInput.sname }}" required>
+      <label for="address">Address</label>
+      <input id="address" name="address" type="text" value="{{ oldInput.address }}" required>
+      <label for="postCode">Post Code</label>
+      <input id="postCode" name="postCode" type="text" value="{{ oldInput.postCode }}" required>
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" value="{{ oldInput.email }}" required>
+      <label for="tel">Tel No.</label>
+      <input id="tel" name="tel" type="text" value="{{ oldInput.tel }}" required>
+      <label for="ref">Member Reference (*not required)</label>
+      <input id="ref" name="ref_name" type="text" v-model="search" @keyup="lookup" placeholder="Enter name or address">
+      <input type="hidden" name="cust_ref" :value="custRef">
+      <div class="table cust ref" :style="tableStyle">
+        <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Post Code</th>
+          </tr>
+        </thead>
+        <tbody>
+          {# vuejs used to show a list of customers, update via ajax #}
+          <tr v-for="cust in customers" @click="addRef(cust)">
+          {% verbatim %}
+            <td>{{ cust.fname }} {{ cust.sname }}</td>
+            <td>{{ cust.address }}</td>
+            <td>{{ cust.postCode }}</td>
+          {% endverbatim %}
+          </tr>
+        </tbody>
+        </table>
+      </div>
+      <input class="button" value="Register" type="submit">
+    </form>
+  </div>
+
+  {% endblock %} 
+
+  {% block footer %} 
+
+    </div>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="{{ base_url() }}/src/js/custsearch.js"></script>
+
+  </body>
+  </html>
+
+  {% endblock %}

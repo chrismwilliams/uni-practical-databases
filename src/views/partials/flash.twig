@@ -1,0 +1,7 @@
+{# check if flash is set, otherwise don't render anything #}
+{% if flash %}
+  <section class="flash {{ flash.key }}">
+    {# display the msg #}
+    <p>{{ flash.msg }}</p>
+  </section>
+{% endif %}

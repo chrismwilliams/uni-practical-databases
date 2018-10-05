@@ -1,0 +1,50 @@
+{# page used with vuejs to search for a customer within the db #}
+{%  extends 'template.view.twig' %}
+
+{% block content %}
+
+  <section class="heading">
+    <h2>Customer Search</h2>
+    <div class="search">
+      <div class="search_box">
+        <input v-model="search" @keyup="lookup" type="text" placeholder="Enter A Post Code Or Last Name" name="search">
+      </div>       
+    </div>
+  </section>
+  <div class="table cust ref" :style="tableStyle">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Address</th>
+          <th>Post Code</th>
+          <th>Email</th>
+          <th>Tel No.</th>
+        </tr>
+      </thead>
+      <tbody>
+        {# vuejs ajax results #}
+        {% verbatim %}
+          <tr v-for="cust in customers" @click="loadCust(cust.customerID)">
+            <td>{{ cust.fname }} {{ cust.sname }}</td>
+            <td>{{ cust.address }}</td>
+            <td>{{ cust.postCode }}</td>
+            <td>{{ cust.email }}</td>
+            <td>{{ cust.tel }}</td>
+          </tr>
+        {% endverbatim %}
+      </tbody>
+    </table>
+  </div>
+
+{% endblock %}
+
+{% block footer %}
+  </div>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="{{ base_url() }}/src/js/custsearch.js"></script>
+
+  </body>
+  </html>
+
+{% endblock %}

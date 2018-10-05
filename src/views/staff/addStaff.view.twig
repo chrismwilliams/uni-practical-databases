@@ -1,0 +1,49 @@
+{# page only admin users access to add a new member of staff #}
+{%  extends 'template.view.twig' %}
+
+  {% block content %}
+
+  <section class="heading">
+    <h2>Add Staff Member</h2>
+  </section>
+  <div class="form-container">
+    <form method="post" action="{{ path_for('postAddStaff') }}" class="form">
+      <h2>Enter Staff Details</h2>
+      {# show all the errors if set #}
+      {% if errors %}
+
+        {% for err in errors %}
+          <p class="error">{{ err| first }}</p>
+        {% endfor %}
+      
+      {% endif %}
+
+      <label for="fname">First Name</label>
+      <input id="fname" name="fname" type="text" value="{{ oldInput.fname }}" required>
+      <label for="sname">Last Name</label>
+      <input id="sname" name="sname" type="text" value="{{ oldInput.sname }}" required>
+      <label for="address">Address</label>
+      <input id="address" name="address" type="text" value="{{ oldInput.address }}" required>
+
+      {# access levels app supports #} 
+      {% if access_levels %}
+        <label>Staff Level</label>
+
+        {% for ac in access_levels %}
+
+          <input type="radio" id="{{ ac.level|e }}" name="access" value="{{ ac.accessID|e }}" 
+            {% if ac.level == 1 %} checked {% endif %} >
+          <label for="{{ ac.level|e }}" class="radio">{{ ac.level|e }} / {{ ac.name|e }}</label>
+             
+        {% endfor %}
+      {% endif %}
+
+      <label for="username">Username</label>
+      <input id="username" name="username" type="text" value="{{ oldInput.username }}" required>
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" required>
+      <input class="button" value="Add Staff" type="submit">
+    </form>
+  </div>
+
+{% endblock %} 

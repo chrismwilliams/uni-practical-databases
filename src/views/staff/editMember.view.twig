@@ -1,0 +1,41 @@
+{# page to update a staff member, only admin users should reach this page #}
+{%  extends 'template.view.twig' %}
+
+  {% block content %}
+
+  <section class="heading">
+    <h2>Edit Staff</h2>
+  </section>
+  <div class="form-container">
+    <form method="post" action="{{ path_for('postUpdateStaff', {'id' : member.staffID}) }}" class="form"> 
+      <h2>Staff Details</h2>
+      <label for="fname">First Name</label>
+      <input id="fname" name="fname" type="text" value="{{ member.fname|e }}">
+      <label for="sname">Last Name</label>
+      <input id="sname" name="sname" type="text" value="{{ member.sname|e }}">
+      
+      <label for="address">Address</label>
+      <input id="address" name="address" type="text" value="{{ member.address|e }}">
+
+      <label>Staff Level</label>
+
+        {% for ac in accessLevels %}
+
+          <input type="radio" id="{{ ac.level|e }}" name="access" value="{{ ac.accessID|e }}" 
+            {{ ac.name == member.name ? 'checked' : '' }} >
+          <label for="{{ ac.level|e }}" class="radio">{{ ac.level|e }} / {{ ac.name|e }}</label>
+             
+        {% endfor %}
+
+      <label for="password">Update Password (*not required)</label>
+      <input id="password" name="password" type="password">
+
+      <input class="button" value="Update" type="submit">
+    </form>
+    {# add a delete button if the user isn't trying to delete themselves #}
+    {% if staff.userID != member.staffID %}
+      <form method="post" action="{{ path_for('postDeleteStaff', {'id' : member.staffID}) }}">
+        <input class="button delete" value="DELETE" type="submit"></input>
+      </form>
+    {% endif %}
+  {% endblock %}

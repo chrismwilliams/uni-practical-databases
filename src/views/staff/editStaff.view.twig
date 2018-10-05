@@ -1,0 +1,38 @@
+{# page to show a list of staff members contained in the system with a link to them #}
+{%  extends 'template.view.twig' %}
+
+  {% block content %}
+
+  <section class="heading">
+    <h2>Edit Staff Members</h2>
+    {% if errors %}
+      {% for err in errors %}
+        <p class="error">{{ err| first }}</p>
+      {% endfor %}   
+    {% endif %}
+  </section>
+  <div class="table">
+    <table>
+    <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Username</th>
+        <th>Access Lvl</th>
+        <th>Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for member in allStaff %}
+      <tr>
+        <td>{{ member.fname|e }}</td>
+        <td>{{ member.sname|e }}</td>
+        <td>{{ member.username|e }}</td>
+        <td>{{ member.name|e|capitalize }}</td>
+        <td><a href="{{ path_for('editStaffByID', {'id' : member.staffID }) }}">(edit)</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    </table>
+  </div>
+ {% endblock %} 

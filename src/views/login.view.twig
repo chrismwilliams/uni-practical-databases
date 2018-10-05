@@ -1,0 +1,27 @@
+{# login form page #}
+{% extends 'template.view.twig' %}
+
+{% block content %}
+
+  <section class="heading">
+    <h2>Log In</h2>
+  </section>
+  <div class="form-container">
+    <form method="POST" action="{{ path_for('postLogin') }}" class="form">
+      <h2>Enter Your Login Details</h2>
+      {# show all the errors if set from the errors middleware class #}
+      {% if errors %}
+        {% for err in errors %}
+          <p class="error">{{ err| first }}</p>
+        {% endfor %}
+      
+      {% endif %}
+      <label for="username">Username *</label>
+      <input type="text" name="username" value="{{ oldInput.username| trim | e }}" required>          
+      <label for="password">Password *</label>
+      <input type="password" name="password" required>
+      <input class="button" type="submit" value="Log In">
+    </form>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,40 @@
+{# aside shown with each page, renders links depending on the access lvl of current staff #}
+<aside class="aside">
+  <h3>🏠 Dashboard</h3>
+  <ul>
+    <li><span>🎬 Movies</span>
+      <ul>
+        <li><a href="{{ path_for('searchMovie') }}">Search</a></li>
+        {% if staff.isAdmin %}
+          <li><a href="{{ path_for('addMovie') }}">Add New</a></li>
+        {% endif %}
+      </ul>
+    </li>
+    <li><span>🙋 Customer</span>
+      <ul>
+        {# show customer name if selected #}
+        {% if cust.isAdded %}
+          <li class="cust">
+            <a href="{{ path_for('customerByID', {'id' : cust.custID}) }}"><em>Customer: {{ cust.custName }}</em></a>
+          </li>
+        {% endif %}
+        {% if cust.orderTotal > 0 %}
+        <li><a class="order" href="{{ path_for('orderMovie') }}">Order: <span class="num">{{ cust.orderTotal }}</span></a></li>
+        {% endif %}
+        <li><a href="{{ path_for('searchCustomer') }}">Search</a></li>
+        <li><a href="{{ path_for('addCustomer') }}">Add New</a></li>
+        <li><a href="{{ path_for('referrers') }}">Referrers</a></li>
+      </ul>
+    </li>
+    {# show the admin routes if they are an admin #}
+    {% if staff.isAdmin %}
+        <li><span>🤘 Staff</span>
+          <ul>
+            <li><a href="{{ path_for('editStaff') }}">Edit</a></li>
+            <li><a href="{{ path_for('addStaff') }}">Add New</a></li>
+            <li><a href="{{ path_for('orders') }}">List of Staff & Orders</a></li>
+          </ul>
+        </li>
+    {% endif %}   
+  </ul>
+</aside>

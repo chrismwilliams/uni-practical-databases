@@ -1,0 +1,15 @@
+{# base template for all other views #}
+
+{# include the header #}
+{% include 'partials/header.twig' %}
+
+{# include the flash #}
+{% include 'partials/flash.twig' %}
+
+{# define an empty block of content, to be filled in #}
+{% block content %}{% endblock %}
+
+{# include the footer #}
+{% block footer %}
+  {% include 'partials/footer.twig' %}
+{% endblock %}

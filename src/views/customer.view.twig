@@ -1,0 +1,111 @@
+{# customer page with specific details taken from the db #}
+{%  extends 'template.view.twig' %}
+
+  {% block content %}
+
+  <section class="heading">
+    <h2>Customer Page</h2>
+  </section>
+
+  <div class="customer_container">
+    <section>
+      <h2>Details</h2> <a href="{{ path_for('editCustomerByID', {'id' : customer.customerID}) }}">(edit)</a>
+      <div class="table">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Address</th>
+              <th>Post Code</th>
+              <th>Tel No.</th>
+              <th>Email</th>
+              {% if customer.refname %}
+                <th>Referenced By</th>
+              {% endif %}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ customer.fname }} {{ customer.sname }}</td>
+              <td>{{ customer.address }}</td>
+              <td>{{ customer.postCode }}</td>
+              <td>{{ customer.tel }}</td>
+              <td>{{ customer.email }}</td>
+              {% if customer.refname %}
+                <td>{{ customer.refname }}</td>
+              {% endif %}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    {# list of customer orders, if any found #}
+    {% if orders %}
+      <section>
+        <h2>Orders</h2>
+        <div class="table">
+          <table>
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Order Date</th>
+                <th>Return Date</th>
+                <th>Returned</th>
+                <th>Movie (platform)</th>
+                <th>Return Movie</th>
+              </tr>
+            </thead>
+            <tbody>
+              {# if the order's not been returned, show links depending on its date of return #}
+              {% for order in orders %}
+                {% if order.returned == 0 and order.remaining > 0 %}
+                  <tr class="overdue">
+                {% elseif order.returned == 0 %}
+                  <tr class="false">
+                {% else %}
+                  <tr class="complete">
+                {% endif %}
+                <td>{{ order.rentalID }}</td>
+                <td>{{ order.orderDate|date("d/m/Y") }}</td>
+                <td>{{ order.returnDate|date("d/m/Y") }}</td>
+                {% if order.returned == 0 %}
+                  <td>{{ order.remaining > 0 ? 'Overdue!' : 'On loan' }}</td>
+                {% else %}
+                  <td>Complete</td>
+                {% endif %}
+                <td>{{ order.title }}  ({{ order.type }})</td>
+                {% if order.returned == 0 and order.remaining > 0 %}
+                  <td>
+                    <a class="overdue" href="{{ path_for('customerRtnLateMovie', {'id' : customer.customerID, 'rntID' : order.rentalDetailID }) }}">Late Return ➡</a>
+                  </td>
+                {% elseif order.returned == 0 %}
+                  <td>
+                    <form method="post" action="{{ path_for('postRtnMovie', {'id' : order.rentalDetailID }) }}">
+                      <input type="hidden" name="customerID" value="{{customer.customerID}}">
+                      <input type="submit" value="Return ➡">
+                    </form>
+                  </td>
+                {% else %}
+                  <td>Completed</td>
+                {% endif %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    {% endif %}
+    {# show if no user selected in the current session #}
+    {% if not cust.isAdded %}
+      <form class="selectCust" method="post" action="{{ path_for('postSelectCustomer') }}">
+        <input type="hidden" name="customerID" value="{{customer.customerID}}">
+        <input type="hidden" name="customerName" value="{{ customer.fname }} {{ customer.sname }}">
+        <input type="submit" value="Select Customer">
+      </form>
+    {% elseif cust.custID == customer.customerID %}
+      <form class="selectCust" method="post" action="{{ path_for('postDeselectCustomer') }}">
+        <input type="submit" value="Deselect Customer">
+      </form>
+    {% endif %}
+  </div>
+  {% endblock %}

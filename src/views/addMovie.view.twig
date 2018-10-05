@@ -1,0 +1,87 @@
+{# page to add a new movie, uses ajax to reflect the platform(s) chosen #}
+{% extends 'template.view.twig' %}
+
+{% block content %}
+
+  <section class="heading">
+    <h2>Add Movie</h2>
+  </section>
+  <div class="form-container">
+    <form method="post" action="{{ path_for('postAddMovie') }}" class="form" enctype="multipart/form-data"> 
+      <h2>Enter Movie Details</h2>
+      {# show errors if set #}
+      {% if errors %}
+
+        {% for err in errors %}
+          <p class="error">{{ err| first }}</p>
+        {% endfor %}
+      
+      {% endif %}
+      <label for="name">Name</label>
+      <input id="name" name="name" type="text" value="{{ oldInput.name | e | trim }}" required>
+      <label for="desc">Description</label>
+      <textarea id="desc" name="desc" required>{{ oldInput.desc| e | trim }}</textarea>
+      <label for="img">Upload image</label>
+      <input id="img" name="img" type="file" required>
+      <label for="genre">Genre</label>
+      {% if genres %}
+        <select name="genre">
+
+        {% for genre in genres %}
+
+          <option value="{{ genre.genreID|e }}">
+          {{ genre.type|e }}
+          </option>
+          
+        {% endfor %}
+
+          <option value="null">N/A</option>
+
+        </select>
+      {% endif %}
+      
+      <div class="plat_container" :style="style">
+        <label for="platform">Platform</label>
+        {# vuejs to change the page depending on the checkbox #}
+        {% verbatim %}
+        <span class="platforms" v-for="plat in platforms">
+          <input :id="plat.type" type="checkbox" v-model="checkedPlatforms" name="platform[]" :value="plat.type"> 
+          <label :for="plat.type" class="checkbox">{{ plat.type }}</label>
+        </span>
+        
+        <div class="platform_amounts" v-if="checkedPlatforms.includes('Blu-ray')">
+          <p>For Blu-ray:</p>
+          <label for="blu_cost">Cost per day</label>
+          <input id="blu_cost" name="blu-ray_cost" type="text" value="2.50" required>
+          <label for="blu_lateFee">Late fee per day</label>
+          <input id="blu_lateFee" name="blu-ray_lateFee" type="text" value="1.00" required>
+          <label for="blu_quantity">Quantity</label>
+          <input id="blu_quantity" name="blu-ray_quantity" type="number" value="1" required>
+        </div>
+        
+        <div class="platform_amounts" v-if="checkedPlatforms.includes('DVD')">
+          <p>For DVD:</p>
+          <label for="dvd_cost">Cost per day</label>
+          <input id="dvd_cost" name="dvd_cost" type="text" value="1.00" required>
+          <label for="dvd_lateFee">Late fee per day</label>
+          <input id="dvd_lateFee" name="dvd_lateFee" type="text" value="0.50" required>
+          <label for="dvd_quantity">Quantity</label>
+          <input id="dvd_quantity" name="dvd_quantity" type="number" value="1" required>
+        </div>
+        {% endverbatim %}
+      </div>
+
+      <input class="button" value="Add ➡" type="submit">
+    </form>
+  </div>
+
+{% endblock %}
+
+{% block footer %}
+  </div>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script src="{{ base_url() }}/src/js/addmovie.js"></script>
+
+  </body>
+  </html>
+{% endblock %}

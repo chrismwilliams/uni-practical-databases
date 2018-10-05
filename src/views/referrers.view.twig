@@ -1,0 +1,41 @@
+{# list of all the customers who have been referred and the name of who #}
+{%  extends 'template.view.twig' %}
+
+  {% block content %}
+
+  <section class="heading">
+    <h2>List of Customers Who've Been Referred</h2>
+  </section>
+
+  <div class="customer_container">
+    <section>
+      <h2>Details</h2>
+      <div class="table">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Address</th>
+              <th>Post Code</th>
+              <th>Tel No.</th>
+              <th>Email</th>
+              <th>Referred By</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for customer in customers %}
+              <tr>
+                <td>{{ customer.fname }} {{ customer.sname }}</td>
+                <td>{{ customer.address }}</td>
+                <td>{{ customer.postCode }}</td>
+                <td>{{ customer.tel }}</td>
+                <td>{{ customer.email }}</td>
+                <td>{{ customer.referrer }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+  {% endblock %}

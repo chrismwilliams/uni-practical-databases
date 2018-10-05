@@ -1,0 +1,8 @@
+DS_STORE
+
+vendor/*
+.env
+Homestead.yaml
+Vagrantfile
+.vagrant
+aliases

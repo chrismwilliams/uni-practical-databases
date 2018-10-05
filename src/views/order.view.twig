@@ -1,0 +1,102 @@
+{# order page, showing the current selected user and all the movies chosen. This pg should not be loaded until both requirements fulfiled #}
+{% extends 'template.view.twig' %}
+
+{% block content %}
+
+  <section class="heading">
+    <h2>Customer Order Page</h2>
+  </section>
+
+  <div class="customer_container">
+    <section>
+      <h2>Customer Details</h2> <a href="{{ path_for('editCustomerByID', {'id' : customer.customerID}) }}">(edit)</a>
+      <div class="table">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Address</th>
+              <th>Post Code</th>
+              <th>Tel No.</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ customer.fname }} {{ customer.sname }}</td>
+              <td>{{ customer.address }}</td>
+              <td>{{ customer.postCode }}</td>
+              <td>{{ customer.tel }}</td>
+              <td>{{ customer.email }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section>
+      <h2>Selected Movies</h2>
+      <div class="table">
+          <table>
+              <thead>
+                <tr>
+                  <th>Movie (Platform)</th>
+                  <th>Cost per Day</th>
+                  <th>Remove</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% set subtotal = 0 %}
+                {% for movie in movieDetails %}
+                  {% set subtotal = subtotal + movie.cost %}
+                  <tr class="movie_lst">
+                    <td><a href="{{ path_for('movieByID', {'id' : movie.movieID}) }}">{{ movie.title }} ({{ movie.type }})</a></td>
+                    <td data-cost="{{ movie.cost }}">£{{ movie.cost }}</td>
+                    <td>
+                      <form action="{{ path_for('postRemoveFromOrder') }}" method="post">
+                        <input type="hidden" name="movieProductID" value="{{ movie.movieProductID }}">
+                        <input type="submit" value="X">
+                      </form>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+      </div>
+    </section>
+    <section>
+      <form class="order_form" method="post" action="{{ path_for('postOrderMovie') }}">
+        <div>
+          <h2>Loan Period</h2> 
+          <div class="radio_gp">
+            <label>
+                <input type="radio" id="1-day" name="period" value="1" checked>
+                1 Day
+            </label>
+            <label>
+                <input type="radio" id="3-day" name="period" value="3">
+                3 Days
+            </label>
+            <label>
+                <input type="radio" id="7-day" name="period" value="7">
+                7 Days
+            </label>
+          </div>
+        </div>
+        <div class="order_total">
+          {# show amount to 2 decimal places #}
+          <h3>Subtotal: £{{ subtotal|number_format(2, '.', ',') }}</h3>
+          <h2>Total Amount: £<span id="total">{{ subtotal|number_format(2, '.', ',') }}</span></h2>
+        </div>
+        <input type="submit" value="Submit Order">
+      </form>
+    </section>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  </div>
+  <script src="{{ base_url() }}/src/js/order.js"></script>
+
+  </body>
+  </html>
+{% endblock %}

@@ -1,0 +1,39 @@
+{# list of all the orders placed in the system and the staff members #}
+{%  extends 'template.view.twig' %}
+
+  {% block content %}
+
+  <section class="heading">
+    <h2>List of Orders inc Customer & Staff* (*if applicable)</h2>
+  </section>
+
+  <div class="customer_container">
+    <section>
+      <h2>Details</h2>
+      <div class="table">
+        <table>
+          <thead>
+            <tr>
+              <th>Staff Member</th>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Order Date</th>
+              <th>Return Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for order in orders %}
+              <tr class="{{ order.rentalID == null ? 'false' : '' }}">
+                <td>{{ order.staff != null ? order.staff : 'NULL' }}</td>
+                <td>{{ order.rentalID != null ? order.rentalID : 'NULL' }}</td>
+                <td>{{ order.customer != null ? order.customer : 'NULL' }}</td>
+                <td>{{ order.orderDate != null ? order.orderDate|date('d-m-Y') : 'NULL' }}</td>
+                <td>{{ order.returnDate != null ? order.returnDate|date('d-m-Y') : 'NULL' }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+  {% endblock %}

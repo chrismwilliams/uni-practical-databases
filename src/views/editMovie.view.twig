@@ -1,0 +1,50 @@
+{# page allowing the user to edit a movie, inc uploading a new image #}
+{% extends 'template.view.twig' %}
+
+{% block content %}
+
+  <section class="heading">
+    <h2>Update: {{ movie.title }}</h2>
+  </section>
+  <div class="form-container">
+    <form method="post" action="{{ path_for('postUpdateMovie', {'id' : movie.movieID}) }}" class="form" enctype="multipart/form-data"> 
+      <h2>Enter New Details</h2>
+      {% if errors %}
+
+        {% for err in errors %}
+          <p class="error">{{ err| first }}</p>
+        {% endfor %}
+      
+      {% endif %}
+      <label for="name">Name</label>
+      <input id="name" name="name" type="text" value="{{ oldInput.name == '' ? movie.title : oldInput.name | e | trim }}" required>
+      <label for="desc">Description</label>
+      <textarea id="desc" name="desc" required>{{ oldInput.desc == '' ? movie.description : oldInput.desc| e | trim }}</textarea>
+      <div class="current_img">
+        <p>Current Image:</p>
+        {# display a thumbnail of the current image #}
+        <img img src="data:image/{{ movie.mime }};base64, {{ movie.img }}" alt="{{ movie.title }}">
+      </div>
+      <label for="img">Upload New Image (*not required)</label>
+      <input id="img" name="img" type="file">
+      <label for="genre">Genre</label>
+      {% if genres %}
+        <select name="genre">
+
+        {% for genre in genres %}
+
+          <option value="{{ genre.genreID|e }}" {{ movie.genreID == genre.genreID ? 'selected' : '' }}>
+          {{ genre.type|e }}
+          </option>
+          
+        {% endfor %}
+
+          <option value="null" {{ movie.genreID == null ? 'selected' : '' }}>N/A</option>
+
+        </select>
+      {% endif %}
+      <input class="button" value="Update ➡" type="submit">
+    </form>
+  </div>
+
+{% endblock %}

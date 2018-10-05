@@ -1,0 +1,42 @@
+{# header page, url's created by Slim's path_for method #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" type="text/css" href="{{ base_url() }}/src/views/css/style.min.css">
+  <title>BB is back!</title>
+</head>
+<body>
+<div class="grid">
+  <header>
+    <nav class="flex">
+      <div class="nav_section">
+        <ul class="flex">
+          <li class="logo flex">BB</li>
+          <li class="flex"><a href="{{ path_for('index') }}">Home</a></li>
+        </ul>
+      </div>
+        <div class="nav_user">
+          <ul class="flex">
+          {# if user logged-in, show the username and the log out link #}
+          {% if staff.isLoggedIn %}
+            <li class="flex">Welcome {{ staff.userName | e }}</li>
+            <li class="flex"><a href="{{ path_for('logout') }}">Log out 👋</a></li>
+          {% else %}
+            <li class="flex"></li>
+            <li class="flex"><a href="{{ path_for('login') }}">Log In</a></li>
+          {% endif %}
+          </ul>
+        </div>
+    </nav>
+  </header>
+
+  {% if staff.isLoggedIn %}
+     {% include('./staff/aside.twig') %}
+  {% else %}
+    <aside class="aside">
+      <h3>🏠 Dashboard</h3>
+      </aside>
+  {% endif %}

@@ -1,0 +1,67 @@
+{# page to detail the customer and the late return of a particular movie #}
+{%  extends 'template.view.twig' %}
+
+  {% block content %}
+
+  <section class="heading">
+    <h2>Late Return Page</h2>
+  </section>
+
+  <div class="customer_container">
+    <section>
+      <h2>Details</h2>
+      <div class="table">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Address</th>
+              <th>Post Code</th>
+              <th>Tel No.</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ customer.fname }} {{ customer.sname }}</td>
+              <td>{{ customer.address }}</td>
+              <td>{{ customer.postCode }}</td>
+              <td>{{ customer.tel }}</td>
+              <td>{{ customer.email }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section>
+      <h2>Late Order</h2>
+      <div class="table">
+        <table>
+          <thead>
+            <tr>
+              <th>Movie (platform)</th>
+              <th>Return Date</th>
+              <th>Late Fee</th>
+              <th>Overdue Days</th>
+              <th>Total Cost:</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ customer.title }} ({{ customer.type }})</td>
+              <td>{{ customer.returnDate|date("d/m/Y") }}</td>
+              <td>£{{ customer.lateFee }}</td>
+              {% set diff = date( now | date() ).diff(date(customer.returnDate)) %}
+              <td>{{ diff.days }}</td>
+              <td class="cost">£{{ (diff.days * customer.lateFee)|number_format(2, '.', ',') }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <form class="rtnMovie" method="post" action="{{ path_for('postRtnMovie', {'id' : customer.rentalDetailID }) }}">
+        <input type="hidden" name="customerID" value="{{customer.customerID}}">
+        <input type="submit" value="Return Movie">
+      </form>
+    </section>
+  </div>
+  {% endblock %}

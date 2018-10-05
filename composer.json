@@ -1,0 +1,23 @@
+{
+  "config": {
+    "platform": {
+      "php": "5.6.29"
+    }
+  },
+  "require": {
+    "slim/slim": "^3.0",
+    "slim/twig-view": "^2.3",
+    "respect/validation": "^1.1",
+    "vlucas/phpdotenv": "^2.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": ["src", "private"]
+    },
+
+    "files": ["private/functions.php"]
+  },
+  "require-dev": {
+    "laravel/homestead": "^7.12"
+  }
+}

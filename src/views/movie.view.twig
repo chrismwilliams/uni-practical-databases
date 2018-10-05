@@ -1,0 +1,50 @@
+{# basic movie page showing the movie details inc per platform current stock totals #}
+{%  extends 'template.view.twig' %}
+
+  {% block content %}
+
+  <section class="heading">
+    <h2>{{ movie.title }}</h2>
+    {% if staff.isAdmin %}
+      <a class="edit" href="{{ path_for('editMovieByID', {'id' : movie.movieID}) }}">(edit)</a>
+  {% endif %}
+    {#
+      {{ movie | json_encode }}
+    #}
+  </section>
+  <div class="movie_container">
+    <div class="movie">
+      <div class="movie_img"><img src="data:image/{{ movie.mime }};base64, {{ movie.img }}" alt="{{ movie.title }}"></div>
+      <div class="movie_details">
+        <h3>Description</h3>
+        <p>{{ movie.description }}</p>
+        <h4>Genre</h4>
+        <p>{{ movie.type ? movie.type : 'N/A' }}</p>
+        <div class="movie_actions">
+          {% for plat in platformDetails %}
+          <div class="platform_container">
+            {# remove if already added #}
+            {% if plat.movieProductID in cust.currentOrder %}
+              <h5>{{plat.platform}}: <span>{{plat.remaining - 1}}/{{plat.quantity}} Remaining</span></h5>
+              <p class="added">Added</p>
+            {% elseif plat.remaining > 0 %}
+              <h5>{{plat.platform}}: <span>{{plat.remaining}}/{{plat.quantity}} Remaining</span></h5>
+              <p>Cost: £{{plat.cost}} per day</p>
+              <div class="add_platform">
+                <form action="{{ path_for('postAddToOrder') }}" method="post">
+                  <input type="hidden" name="movieID" value={{ movie.movieID }}>
+                  <input type="hidden" name="movieProductID" value={{ plat.movieProductID }}>
+                  <input type="submit" class="add_btn" value="ADD">
+                </form>
+              </div>
+            {% else %}
+              <h5>{{plat.platform}}:</h5>
+              <p class="sold_out">SOLD OUT!</p>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div> 
+      </div>
+    </div>
+  </div>
+  {% endblock %}
