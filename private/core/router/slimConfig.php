@@ -5,7 +5,7 @@
 $config['displayErrorDetails'] = true;
 
 // slim config
-$config['addContentLenghHeader'] = false;
+$config['addContentLengthHeader'] = false;
 
 // admin and logged In check before certain routes
 $config['determineRouteBeforeAppMiddleware'] = true;
